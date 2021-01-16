@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Drag and Drop</title>
+  <style>
+    #draggable {
+      width: 100px;
+      height: 100px;
+      background-color: #f1f1f1;
+      border: 1px solid #d3d3d3;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    closeDragElement = () => {
+      /* stop moving when mouse button is released:*/
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+
+    const elementDrag = (event, element) => {
+        event = event || window.event;
+        event.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - event.clientX;
+        pos2 = pos4 - event.clientY;
+        pos3 = event.clientX;
+        pos4 = event.clientY;
+        // set the element's new position:
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+      }
+
+    const dragMouseDown = (event, element) => {
+        console.log('clientX', event.clientX, 'clientY', event.clientY);
+        // event = event || window.event;
+        event.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = event.clientX;
+        pos4 = event.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag(event, element);
+      }
+
+    const dragElement = (element) => {
+      if (element) {
+        console.log('element', element.onmousedown)
+        element.onmousedown = dragMouseDown(event, element);
+      }
+    }
+
+    dragElement(document.getElementById("draggable"));
+  </script>
+</head>
+<body>
+  <div id="draggable"></div>
+</body>
+</html>
